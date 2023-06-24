@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BAC attack</title>
+    <style>
+        body {
+            padding: 3rem;
+            background-color: #111631;
+            color: #eaeaea !important;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="submit"] {
+            color: #eaeaea;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 300px;
+            background-color: #202c60;
+            border-radius: 5px;
+            border: 1px solid rgba(204, 204, 204, 0.5);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(204, 204, 204, 0.7);
+        }
+
+        input[type="submit"] {
+            background-color: #0b640b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-top: 40px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        img {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        span {
+            border: 2px solid rgba(217, 2, 27, 0.75);
+            padding: 8px 12px;
+            background-color: rgba(255, 189, 197, 0.85);
+            border-radius: 5px;
+            color: whitesmoke;
+            font-weight: 600;
+        }
+
+        pre {
+            display: block;
+            white-space: pre-wrap;
+            font-family: inherit;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        /* Retrieve the token from the localStorage */
+        const token = localStorage.getItem('jwtToken') || null;
+
+        /* Check if the token exists */
+        if (token) {
+            /* Save the token to localStorage */
+            fetch("/authentication/login", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<form onsubmit="return onSubmit()" th:method="get">
+    <label>
+        File path:
+        <input type="text" id="fileInput" name="bac" value="" placeholder="File path to retrieve...">
+    </label>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<br>
+
+<h2>File contents</h2>
+<span th:text="${errorMessage}"></span>
+<pre th:text="${fileContents}"></pre>
+
+<script>
+    function onSubmit(e) {
+        console.log("onSubmit")
+        e.preventDefault();
+        // get the file path input field and its value
+        const fileInput = document.getElementById("fileInput");
+        const fileInputValue = fileInput.value;
+        window.location.href = `http://localhost:8081/bac?file=${fileInputValue}`;
+
+        return false;
+    }
+
+    const errorMessage = document.querySelector("span");
+    const fileContents = document.querySelector("pre");
+    if (errorMessage.textContent !== "") {
+        fileContents.style.display = "none";
+    } else {
+        errorMessage.style.display = "none";
+    }
+</script>
+</body>
+</html>

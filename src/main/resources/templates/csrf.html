@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF attack</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #111631;
+            color: #eaeaea !important;
+            box-sizing: border-box;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="submit"] {
+            color: #eaeaea;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 300px;
+            background-color: #202c60;
+            border-radius: 5px;
+            border: 1px solid rgba(204, 204, 204, 0.5);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(204, 204, 204, 0.7);
+        }
+
+        input[type="submit"] {
+            background-color: #0b640b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-top: 40px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        img {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<!-- CSRF ATTACK -->
+<!-- Dangerous way -->
+<h3>Dangerous way</h3>
+<form method="post" action="/csrf" th:object="${formModel}">
+    <input type="hidden" name="facilityId" value="1"/>
+    <input type="text" name="firstName" value="John"/>
+    <input type="text" name="lastName" value="Doe"/>
+    <input type="text" name="address" value="Some address"/>
+    <input type="text" name="phoneNumber" value="123456789"/>
+    <input type="text" name="email" value="some.one@gmail.com"/>
+    <input type="text" name="oib" value="000000010"/>
+    <input type="text" name="imageUrl" value="https://img.ifunny.co/images/82a14aff81b02df6171009ffb3080d9eab3722021c81801737aec623d5979db5_1.jpg"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<br/>
+<br/>
+
+<!-- Safe way -->
+<h3>Safe way</h3>
+<form method="post" action="/csrf" th:object="${formModel}" th:action="@{/csrf}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" name="facilityId" value="1"/>
+    <input type="text" name="firstName" value="John"/>
+    <input type="text" name="lastName" value="Doe"/>
+    <input type="text" name="address" value="Some address"/>
+    <input type="text" name="phoneNumber" value="123456789"/>
+    <input type="text" name="email" value="some.one@gmail.com"/>
+    <input type="text" name="oib" value="000000010"/>
+    <input type="text" name="imageUrl" value="https://img.ifunny.co/images/82a14aff81b02df6171009ffb3080d9eab3722021c81801737aec623d5979db5_1.jpg"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<br/>
+<br/>
+
+<h1>Form Submission Result:</h1>
+<p>First Name: <span th:text="${formModel.firstName}"></span></p>
+<p>Last Name: <span th:text="${formModel.lastName}"></span></p>
+<p>Address: <span th:text="${formModel.address}"></span></p>
+<p>Phone Number: <span th:text="${formModel.phoneNumber}"></span></p>
+<p>Email: <span th:text="${formModel.email}"></span></p>
+<p>OIB: <span th:text="${formModel.oib}"></span></p>
+<img th:src="${formModel.imageUrl}" width="500" height="550" alt="Profile Image">
+</body>
+</html>

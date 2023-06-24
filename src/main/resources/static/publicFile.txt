@@ -1,0 +1,1 @@
+Something that can be accessed by authorized users of the app. No harm there.

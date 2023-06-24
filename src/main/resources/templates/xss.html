@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>XSS attack</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #111631;
+            color: #eaeaea;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+<!-- XSS ATTACK -->
+<!-- Dangerous way -->
+<h2 th:utext="'Welcome to Healthcare app, ' + ${name} + '!'"></h2>
+
+<!-- Safe way -->
+<h2 th:text="'Welcome to Healthcare app, ' + ${name} + '!'"></h2>
+</body>
+</html>
